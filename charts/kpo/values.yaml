@@ -25,7 +25,7 @@ oci:
       applicationResource: ""
 
   # Optional: set when KPO should launch nodes in a different compartment.
-  nodeCompartmentId: ""
+  nodeCompartmentId: "ocid1.compartment.oc1..aaaaaaaayevnkjfyjb6nglndfrvgoy7hciclgf4kq7ioulokey7xfpixjhxa"
 
   # Optional: use an explicit OKE image OCID instead of imageFilter.
   imageId: ""
