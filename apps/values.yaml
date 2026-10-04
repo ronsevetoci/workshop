@@ -132,6 +132,7 @@ applications:
   - name: keda
     enabled: true
     project: workshop
+    serverSideApply: true
     destination:
       namespace: keda
     syncWave: "25"
