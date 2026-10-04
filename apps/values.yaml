@@ -14,6 +14,34 @@ applications:
       namespace: workshop-governance
     syncWave: "10"
 
+  - name: metrics-server
+    enabled: true
+    project: workshop
+    destination:
+      namespace: metrics-server
+    syncWave: "15"
+    sources:
+      - repoURL: https://kubernetes-sigs.github.io/metrics-server/
+        chart: metrics-server
+        targetRevision: "3.14.0"
+        helm:
+          releaseName: metrics-server
+          valuesObject:
+            replicas: 1
+
+            nodeSelector:
+              kubernetes.io/os: linux
+              oke.oraclecloud.com/pool.name: np-system
+
+            tolerations:
+              - key: CriticalAddonsOnly
+                operator: Equal
+                value: "true"
+                effect: NoSchedule
+
+            args:
+              - --kubelet-preferred-address-types=InternalIP
+
   - name: hpa
     enabled: false
     project: workshop

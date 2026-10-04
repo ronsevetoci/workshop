@@ -9,6 +9,7 @@ spec:
   sourceRepos:
     - {{ .Values.config.spec.source.repoURL | quote }}
     - "https://oracle.github.io/karpenter-provider-oci/charts"
+    - "https://kubernetes-sigs.github.io/metrics-server/
 
   destinations:
     - server: {{ .Values.config.spec.destination.server | quote }}
@@ -19,7 +20,8 @@ spec:
       namespace: kube-system
     - server: {{ .Values.config.spec.destination.server | quote }}
       namespace: kube-node-lease
-
+     - server: {{ .Values.config.spec.destination.server | quote }}
+      namespace: metrics-server
 {{- range .Values.applications }}
 {{- if ne .enabled false }}
     - server: {{ $.Values.config.spec.destination.server | quote }}
@@ -27,6 +29,9 @@ spec:
 {{- end }}
 {{- end }}
 
+clusterResourceWhitelist:
+  - group: apiregistration.k8s.io
+    kind: APIService
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
