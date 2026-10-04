@@ -5,18 +5,28 @@ metadata:
   namespace: argocd
 spec:
   description: Instructor-owned OKE workshop
+
   sourceRepos:
     - {{ .Values.config.spec.source.repoURL | quote }}
     - "https://oracle.github.io/karpenter-provider-oci/charts"
+
   destinations:
     - server: {{ .Values.config.spec.destination.server | quote }}
       namespace: workshop-kpo
+
+    # Required by KPO for DNS and lease RBAC resources.
+    - server: {{ .Values.config.spec.destination.server | quote }}
+      namespace: kube-system
+    - server: {{ .Values.config.spec.destination.server | quote }}
+      namespace: kube-node-lease
+
 {{- range .Values.applications }}
 {{- if ne .enabled false }}
     - server: {{ $.Values.config.spec.destination.server | quote }}
       namespace: {{ .destination.namespace | quote }}
 {{- end }}
 {{- end }}
+
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
@@ -36,6 +46,7 @@ spec:
       kind: CapacityBuffer
     - group: oci.oraclecloud.com
       kind: OCINodeClass
+
   namespaceResourceWhitelist:
     - group: ""
       kind: ConfigMap
