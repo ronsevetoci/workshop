@@ -1,0 +1,23 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: {{ .Release.Namespace }}
+spec:
+  gatewayClassName: envoy-oci
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+{{ if .Values.tls.enabled }}
+    - name: https
+      # OCI Load Balancer terminates TLS before traffic reaches Envoy.
+      protocol: HTTP
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: All
+{{ end }}

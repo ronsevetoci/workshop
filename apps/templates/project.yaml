@@ -12,6 +12,7 @@ spec:
     - "https://kubernetes-sigs.github.io/metrics-server/"
     - "https://kedacore.github.io/charts"
     - "https://kyverno.github.io/kyverno/"
+    - "oci://docker.io/envoyproxy/gateway-helm"
 
   destinations:
     - server: {{ .Values.config.spec.destination.server | quote }}
@@ -91,6 +92,7 @@ spec:
 
     - group: kyverno.io
       kind: GlobalContextEntry
+
 
   namespaceResourceWhitelist:
     - group: ""

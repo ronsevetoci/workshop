@@ -1,0 +1,38 @@
+{{- if or (not .Values.oci.podsNsgOcid) (eq .Values.oci.podsNsgOcid "<SET_PODS_NSG_OCID>") }}
+{{- fail "Set oci.podsNsgOcid in charts/ingress/values.yaml before deploying Envoy Gateway" }}
+{{- end }}
+
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: oci-lb-proxy
+  namespace: {{ .Release.Namespace }}
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: {{ .Values.dataPlane.replicas }}
+        nodeSelector:
+{{ toYaml .Values.dataPlane.nodeSelector | nindent 10 }}
+        tolerations:
+{{ toYaml .Values.dataPlane.tolerations | nindent 10 }}
+
+      envoyService:
+        type: LoadBalancer
+        allocateLoadBalancerNodePorts: false
+        externalTrafficPolicy: Local
+        annotations:
+          oci.oraclecloud.com/load-balancer-type: "lb"
+          service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+          service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: {{ .Values.oci.loadBalancerShapeFlexMin | quote }}
+          service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: {{ .Values.oci.loadBalancerShapeFlexMax | quote }}
+          oci.oraclecloud.com/health-check: {{ .Values.oci.healthCheck | quote }}
+          oci.oraclecloud.com/security-rule-management-mode: "NSG"
+          oci.oraclecloud.com/oci-backend-network-security-group: {{ .Values.oci.podsNsgOcid | quote }}
+          service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
+{{ if .Values.tls.enabled }}
+          service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+          oci.oraclecloud.com/oci-load-balancer-listener-ssl-config: '{"CipherSuiteName":"oci-default-ssl-cipher-suite-v1","Protocols":["TLSv1.2"]}'
+          service.beta.kubernetes.io/oci-load-balancer-tls-secret: {{ .Values.tls.secretName | quote }}
+{{ end }}

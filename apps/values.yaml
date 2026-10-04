@@ -50,6 +50,53 @@ applications:
       namespace: workshop-hpa
     syncWave: "20"
 
+  - name: envoy-gateway-controller
+    enabled: true
+    project: workshop
+    destination:
+      namespace: envoy-gateway-system
+    syncWave: "30"
+    sources:
+      - repoURL: oci://docker.io/envoyproxy/gateway-helm
+        path: .
+        targetRevision: "v1.9.2"
+        helm:
+          releaseName: eg
+          valuesObject:
+            crds:
+              enabled: true
+
+            deployment:
+              replicas: 1
+              pod:
+                nodeSelector:
+                  kubernetes.io/os: linux
+                  oke.oraclecloud.com/pool.name: np-system
+                tolerations:
+                  - key: CriticalAddonsOnly
+                    operator: Equal
+                    value: "true"
+                    effect: NoSchedule
+
+            certgen:
+              job:
+                nodeSelector:
+                  kubernetes.io/os: linux
+                  oke.oraclecloud.com/pool.name: np-system
+                tolerations:
+                  - key: CriticalAddonsOnly
+                    operator: Equal
+                    value: "true"
+                    effect: NoSchedule
+
+  - name: ingress
+    enabled: true
+    project: workshop
+    path: charts/ingress
+    destination:
+      namespace: envoy-gateway-system
+    syncWave: "35"
+
   - name: ingress
     enabled: false
     project: workshop

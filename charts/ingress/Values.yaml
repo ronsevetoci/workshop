@@ -1,0 +1,30 @@
+oci:
+  podsNsgOcid: "<SET_PODS_NSG_OCID>"
+
+  loadBalancerShape: flexible
+  loadBalancerShapeFlexMin: "10"
+  loadBalancerShapeFlexMax: "100"
+
+  healthCheck: >-
+    {"protocol":"HTTP","port":19003,"urlPath":"/ready","retries":3,"timeoutInMillis":4000}
+
+tls:
+  enabled: false
+  secretName: envoy-gateway-tls-secret
+
+dataPlane:
+  replicas: 1
+
+  nodeSelector:
+    workshop.oracle.com/workload-tier: kpo-apps
+
+  tolerations:
+    - key: workshop.oracle.com/kpo-apps
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
+
+demo:
+  enabled: true
+  replicas: 1
+  image: registry.k8s.io/echoserver:1.8
