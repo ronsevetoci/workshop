@@ -93,11 +93,11 @@ spec:
     - group: kyverno.io
       kind: GlobalContextEntry
 
-    - group: gateway.networking.k8s.io
-      kind: admissionregistration.k8s.io/ValidatingAdmissionPolicy
-    
-    - group: gateway.networking.k8s.io
-      kind: admissionregistration.k8s.io/ValidatingAdmissionPolicyBinding
+    - group: admissionregistration.k8s.io
+      kind: ValidatingAdmissionPolicy
+
+    - group: admissionregistration.k8s.io
+      kind: ValidatingAdmissionPolicyBinding
     
   namespaceResourceWhitelist:
     - group: ""
