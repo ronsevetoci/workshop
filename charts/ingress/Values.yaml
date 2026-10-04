@@ -1,5 +1,5 @@
 oci:
-  podsNsgOcid: "<SET_PODS_NSG_OCID>"
+  podsNsgOcid: "ocid1.networksecuritygroup.oc1.me-jeddah-1.aaaaaaaac2bks2gkcsqu7anexc7ac6s3zyglyxauiuipbpbhk4hnctvehlhq"
 
   loadBalancerShape: flexible
   loadBalancerShapeFlexMin: "10"
