@@ -46,7 +46,7 @@ applications:
             replicaCount: 1
             nodeSelector:
               kubernetes.io/os: linux
-              workshop.oracle.com/node-pool: core
+              oke.oraclecloud.com/pool.name: np-system
             tolerations:
               - key: CriticalAddonsOnly
                 operator: Equal
