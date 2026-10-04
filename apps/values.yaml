@@ -3,8 +3,8 @@ config:
     destination:
       server: https://kubernetes.default.svc
     source:
-      repoURL: https://github.com/YOUR_ORG/YOUR_REPO.git
-      targetRevision: workshop
+      repoURL: https://github.com/ronsevetoci/workshop
+      targetRevision: main
 
 applications:
   - name: governance
