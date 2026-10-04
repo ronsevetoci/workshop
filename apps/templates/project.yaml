@@ -7,7 +7,10 @@ spec:
   description: Instructor-owned OKE workshop
   sourceRepos:
     - {{ .Values.config.spec.source.repoURL | quote }}
+    - "https://oracle.github.io/karpenter-provider-oci/charts"
   destinations:
+    - server: {{ .Values.config.spec.destination.server | quote }}
+      namespace: workshop-kpo
 {{- range .Values.applications }}
 {{- if ne .enabled false }}
     - server: {{ $.Values.config.spec.destination.server | quote }}
@@ -17,6 +20,22 @@ spec:
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: karpenter.sh
+      kind: NodePool
+    - group: karpenter.sh
+      kind: NodeClaim
+    - group: karpenter.sh
+      kind: NodeOverlay
+    - group: autoscaling.x-k8s.io
+      kind: CapacityBuffer
+    - group: oci.oraclecloud.com
+      kind: OCINodeClass
   namespaceResourceWhitelist:
     - group: ""
       kind: ConfigMap
@@ -28,8 +47,18 @@ spec:
       kind: ResourceQuota
     - group: ""
       kind: Service
+    - group: ""
+      kind: ServiceAccount
+    - group: ""
+      kind: Secret
     - group: apps
       kind: Deployment
+    - group: policy
+      kind: PodDisruptionBudget
+    - group: rbac.authorization.k8s.io
+      kind: Role
+    - group: rbac.authorization.k8s.io
+      kind: RoleBinding
     - group: autoscaling
       kind: HorizontalPodAutoscaler
     - group: gateway.networking.k8s.io
