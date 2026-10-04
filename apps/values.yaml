@@ -97,14 +97,6 @@ applications:
       namespace: envoy-gateway-system
     syncWave: "35"
 
-  - name: ingress
-    enabled: false
-    project: workshop
-    path: charts/ingress
-    destination:
-      namespace: workshop-ingress
-    syncWave: "30"
-
   - name: kpo
     enabled: true
     project: workshop

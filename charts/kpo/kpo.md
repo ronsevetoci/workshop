@@ -1,18 +1,24 @@
 # KPO workshop setup
 
-The `workshop-kpo` Argo CD Application is intentionally disabled until the
-cluster-specific OCI values and IAM prerequisites are supplied.
+The `workshop-kpo` Argo CD Application is enabled in `apps/values.yaml`. It combines
+the Oracle Karpenter Provider for OCI Helm chart (`1.4.0`) with `charts/kpo`, which
+creates the `workshop-kpo` namespace, `OCINodeClass`, `NodePool`, HPA, and demo workload.
 
-It combines two sources in one Argo CD Application:
+The KPO controller runs on the existing `np-system` node pool. Its node selector is:
 
-1. The pinned Oracle Karpenter Provider for OCI Helm chart (`1.4.0`).
-2. `charts/kpo`, which creates the `OCINodeClass`, `NodePool`, HPA and demo workload.
+```yaml
+oke.oraclecloud.com/pool.name: np-system
+```
 
-## 1. Prepare the core node pool
+It tolerates the system-pool taint `CriticalAddonsOnly=true:NoSchedule`:
 
-The KPO controller must run on the existing core node pool. The pool already
-has the `CriticalAddonsOnly=true:NoSchedule` taint, so add a persistent node
-label to that OKE node pool:
+```yaml
+- key: CriticalAddonsOnly
+  operator: Equal
+  value: "true"
+  effect: NoSchedule
+```
 
-```text
-workshop.oracle.com/node-pool=core
+The workload in `charts/kpo` targets the KPO-managed `workshop-kpo-apps` NodePool.
+IAM, dynamic-group `CLUSTER_JOIN`, OCI CNI, worker and pod subnets, and NSG
+prerequisites are external to this repository.
