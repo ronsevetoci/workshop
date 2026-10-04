@@ -12,15 +12,20 @@ metadata:
     argocd.argoproj.io/sync-wave: {{ .syncWave | quote }}
 spec:
   project: {{ .project | quote }}
+{{- if .sources }}
+  sources:
+{{ toYaml .sources | nindent 4 }}
+{{- else }}
   source:
     repoURL: {{ $.Values.config.spec.source.repoURL | quote }}
     targetRevision: {{ $.Values.config.spec.source.targetRevision | quote }}
     path: {{ .path | quote }}
+{{- end }}
   destination:
     server: {{ $.Values.config.spec.destination.server | quote }}
     namespace: {{ .destination.namespace | quote }}
   syncPolicy:
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
 {{- end }}
 {{- end }}
