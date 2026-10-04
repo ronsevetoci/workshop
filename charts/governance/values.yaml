@@ -25,16 +25,12 @@ limitRange:
     memory: 256Mi
 
 image:
-  repository: nginxinc/nginx-unprivileged
+  repository: docker.io/nginxinc/nginx-unprivileged
   tag: stable
   pullPolicy: IfNotPresent
 
 demo:
   replicas: 1
-  tolerations:
-    - key: oci.oraclecloud.com/application-resource-only
-      operator: Exists
-      effect: NoSchedule
   resources:
     requests:
       cpu: 100m
