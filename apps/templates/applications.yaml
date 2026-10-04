@@ -20,7 +20,7 @@ spec:
     server: {{ $.Values.config.spec.destination.server | quote }}
     namespace: {{ .destination.namespace | quote }}
   syncPolicy: {}
-  syncOptions:
+    syncOptions:
     - CreateNamespace=true
 {{- end }}
 {{- end }}
