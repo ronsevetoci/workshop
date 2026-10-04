@@ -2,8 +2,27 @@ namespace:
   name: workshop-kpo
 
 oci:
-  # Required: subnet used by KPO-provisioned worker nodes.
-  workerSubnetId: ""
+  # Required: subnet used by the primary VNIC of KPO-provisioned worker nodes.
+  workerSubnetId: "ocid1.subnet.oc1.me-jeddah-1.aaaaaaaa2tc6yawncwe4yoobzplniufch6vpqlwcmwz55yd3shdmuo2psrya"
+
+  # Optional: NSGs attached to the primary worker-node VNIC.
+  primaryNetworkSecurityGroupIds: ["ocid1.networksecuritygroup.oc1.me-jeddah-1.aaaaaaaa2jer53rca2xj2utejsgdg3kvizbxegpmkgtxif4l5gvcn6rw6tha"]
+
+  # Secondary VNIC profiles used by the OCI VCN-native CNI for pod networking.
+  secondaryVnicConfigs:
+    - name: pod-default
+      # Required: private regional pod subnet.
+      subnetId: "ocid1.subnet.oc1.me-jeddah-1.aaaaaaaake4l2s7epn2l26nqez6ive5thbhdxpy5wck57eaf7cze3yg2ho5a"
+
+      # Must be a power of two.
+      ipCount: 32
+
+      # Optional: NSGs attached to this secondary VNIC.
+      networkSecurityGroupIds: ["ocid1.networksecuritygroup.oc1.me-jeddah-1.aaaaaaaac2bks2gkcsqu7anexc7ac6s3zyglyxauiuipbpbhk4hnctvehlhq"]
+
+      # Optional: use only when workloads must select this profile
+      # through an extended resource request.
+      applicationResource: ""
 
   # Optional: set when KPO should launch nodes in a different compartment.
   nodeCompartmentId: ""
@@ -13,7 +32,7 @@ oci:
 
   imageFilter:
     osFilter: Oracle Linux
-    osVersionFilter: "8"
+    osVersionFilter: "9"
 
 nodePool:
   name: workshop-kpo-apps

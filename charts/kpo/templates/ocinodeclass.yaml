@@ -24,3 +24,26 @@ spec:
     primaryVnicConfig:
       subnetConfig:
         subnetId: {{ required "charts/kpo: oci.workerSubnetId must be set" .Values.oci.workerSubnetId | quote }}
+{{- with .Values.oci.primaryNetworkSecurityGroupIds }}
+      networkSecurityGroupConfigs:
+{{- range . }}
+        - networkSecurityGroupId: {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- with .Values.oci.secondaryVnicConfigs }}
+    secondaryVnicConfigs:
+{{- range $index, $vnic := . }}
+      - subnetConfig:
+          subnetId: {{ required (printf "charts/kpo: oci.secondaryVnicConfigs[%d].subnetId must be set" $index) $vnic.subnetId | quote }}
+{{- with $vnic.networkSecurityGroupIds }}
+        networkSecurityGroupConfigs:
+{{- range . }}
+          - networkSecurityGroupId: {{ . | quote }}
+{{- end }}
+{{- end }}
+        ipCount: {{ required (printf "charts/kpo: oci.secondaryVnicConfigs[%d].ipCount must be set" $index) $vnic.ipCount }}
+{{- with $vnic.applicationResource }}
+        applicationResource: {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
