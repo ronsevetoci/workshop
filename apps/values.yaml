@@ -89,3 +89,80 @@ applications:
       - repoURL: https://github.com/ronsevetoci/workshop
         targetRevision: main
         path: charts/kpo
+  - name: keda
+    enabled: true
+    project: workshop
+    destination:
+      namespace: keda
+    syncWave: "25"
+    sources:
+      - repoURL: https://kedacore.github.io/charts
+        chart: keda
+        targetRevision: "2.21.0"
+        helm:
+          releaseName: keda
+          valuesObject:
+            operator:
+              nodeSelector:
+                kubernetes.io/os: linux
+                oke.oraclecloud.com/pool.name: np-system
+              tolerations:
+                - key: CriticalAddonsOnly
+                  operator: Equal
+                  value: "true"
+                  effect: NoSchedule
+
+            metricsServer:
+              nodeSelector:
+                kubernetes.io/os: linux
+                oke.oraclecloud.com/pool.name: np-system
+              tolerations:
+                - key: CriticalAddonsOnly
+                  operator: Equal
+                  value: "true"
+                  effect: NoSchedule
+
+            webhooks:
+              nodeSelector:
+                kubernetes.io/os: linux
+                oke.oraclecloud.com/pool.name: np-system
+              tolerations:
+                - key: CriticalAddonsOnly
+                  operator: Equal
+                  value: "true"
+                  effect: NoSchedule
+
+  - name: kyverno
+    enabled: true
+    project: workshop
+    destination:
+      namespace: kyverno
+    syncWave: "26"
+    sources:
+      - repoURL: https://kyverno.github.io/kyverno/
+        chart: kyverno
+        targetRevision: "3.9.1"
+        helm:
+          releaseName: kyverno
+          valuesObject:
+            global:
+              nodeSelector:
+                kubernetes.io/os: linux
+                oke.oraclecloud.com/pool.name: np-system
+              tolerations:
+                - key: CriticalAddonsOnly
+                  operator: Equal
+                  value: "true"
+                  effect: NoSchedule
+
+            admissionController:
+              replicas: 1
+
+            backgroundController:
+              replicas: 1
+
+            cleanupController:
+              replicas: 1
+
+            reportsController:
+              replicas: 1

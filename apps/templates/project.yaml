@@ -10,6 +10,8 @@ spec:
     - {{ .Values.config.spec.source.repoURL | quote }}
     - "https://oracle.github.io/karpenter-provider-oci/charts"
     - "https://kubernetes-sigs.github.io/metrics-server/"
+    - "https://kedacore.github.io/charts"
+    - "https://kyverno.github.io/kyverno/"
 
   destinations:
     - server: {{ .Values.config.spec.destination.server | quote }}
@@ -44,12 +46,19 @@ spec:
     - group: apiregistration.k8s.io
       kind: APIService
 
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+
     - group: rbac.authorization.k8s.io
       kind: ClusterRole
 
     - group: rbac.authorization.k8s.io
       kind: ClusterRoleBinding
 
+    # Karpenter Provider for OCI
     - group: karpenter.sh
       kind: NodePool
 
@@ -65,8 +74,23 @@ spec:
     - group: oci.oraclecloud.com
       kind: OCINodeClass
 
+    # Gateway API
     - group: gateway.networking.k8s.io
       kind: GatewayClass
+
+    # KEDA
+    - group: keda.sh
+      kind: ClusterTriggerAuthentication
+
+    # Kyverno
+    - group: kyverno.io
+      kind: ClusterPolicy
+
+    - group: kyverno.io
+      kind: ClusterCleanupPolicy
+
+    - group: kyverno.io
+      kind: GlobalContextEntry
 
   namespaceResourceWhitelist:
     - group: ""
@@ -82,13 +106,13 @@ spec:
       kind: ResourceQuota
 
     - group: ""
-      kind: Secret
-
-    - group: ""
       kind: Service
 
     - group: ""
       kind: ServiceAccount
+
+    - group: ""
+      kind: Secret
 
     - group: apps
       kind: Deployment
@@ -98,6 +122,12 @@ spec:
 
     - group: apps
       kind: StatefulSet
+
+    - group: batch
+      kind: Job
+
+    - group: batch
+      kind: CronJob
 
     - group: policy
       kind: PodDisruptionBudget
@@ -114,6 +144,7 @@ spec:
     - group: autoscaling
       kind: HorizontalPodAutoscaler
 
+    # Gateway API
     - group: gateway.networking.k8s.io
       kind: Gateway
 
@@ -123,5 +154,36 @@ spec:
     - group: gateway.networking.k8s.io
       kind: ReferenceGrant
 
+    # Envoy Gateway
     - group: gateway.envoyproxy.io
       kind: EnvoyProxy
+
+    # KEDA
+    - group: keda.sh
+      kind: ScaledObject
+
+    - group: keda.sh
+      kind: ScaledJob
+
+    - group: keda.sh
+      kind: TriggerAuthentication
+
+    # Kyverno
+    - group: kyverno.io
+      kind: Policy
+
+    - group: kyverno.io
+      kind: PolicyException
+
+    - group: kyverno.io
+      kind: CleanupPolicy
+
+    - group: kyverno.io
+      kind: UpdateRequest
+
+    # Optional Prometheus integration
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
+
+    - group: monitoring.coreos.com
+      kind: PrometheusRule
