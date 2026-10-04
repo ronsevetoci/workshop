@@ -27,5 +27,8 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
+{{- if .serverSideApply }}
+      - ServerSideApply=true
+{{- end }}
 {{- end }}
 {{- end }}

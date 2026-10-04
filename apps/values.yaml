@@ -52,6 +52,7 @@ applications:
 
   - name: envoy-gateway-controller
     enabled: true
+    serverSideApply: true
     project: workshop
     destination:
       namespace: envoy-gateway-system
