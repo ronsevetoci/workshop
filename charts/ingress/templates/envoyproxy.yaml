@@ -27,7 +27,7 @@ spec:
           service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
           service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: {{ .Values.oci.loadBalancerShapeFlexMin | quote }}
           service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: {{ .Values.oci.loadBalancerShapeFlexMax | quote }}
-          oci.oraclecloud.com/health-check: {{ .Values.oci.healthCheck | quote }}
+          oci-load-balancer.oraclecloud.com/health-check: {{ .Values.oci.healthCheck | quote }}
           oci.oraclecloud.com/security-rule-management-mode: "NSG"
           oci.oraclecloud.com/oci-backend-network-security-group: {{ .Values.oci.podsNsgOcid | quote }}
           service.beta.kubernetes.io/oci-load-balancer-backend-protocol: "HTTP"
