@@ -17,6 +17,8 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+      tolerations:
+  {{ toYaml .Values.demo.tolerations | indent 8 }}
       containers:
         - name: nginx
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

@@ -31,6 +31,10 @@ image:
 
 demo:
   replicas: 1
+  tolerations:
+    - key: oci.oraclecloud.com/application-resource-only
+      operator: Exists
+      effect: NoSchedule
   resources:
     requests:
       cpu: 100m
