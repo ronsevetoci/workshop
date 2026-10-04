@@ -1,0 +1,37 @@
+config:
+  spec:
+    destination:
+      server: https://kubernetes.default.svc
+    source:
+      repoURL: https://github.com/YOUR_ORG/YOUR_REPO.git
+      targetRevision: workshop
+
+applications:
+  - name: governance
+    project: workshop
+    path: charts/governance
+    destination:
+      namespace: workshop-governance
+    syncWave: "10"
+
+  - name: hpa
+    project: workshop
+    path: charts/hpa
+    destination:
+      namespace: workshop-hpa
+    syncWave: "20"
+
+  - name: ingress
+    project: workshop
+    path: charts/ingress
+    destination:
+      namespace: workshop-ingress
+    syncWave: "30"
+
+  - name: kpo
+    enabled: false
+    project: workshop
+    path: charts/kpo
+    destination:
+      namespace: workshop-kpo
+    syncWave: "40"

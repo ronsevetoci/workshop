@@ -1,0 +1,40 @@
+namespace:
+  name: workshop-governance
+
+quota:
+  pods: "10"
+  requests:
+    cpu: "1"
+    memory: 1Gi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+limitRange:
+  default:
+    cpu: 250m
+    memory: 128Mi
+  defaultRequest:
+    cpu: 100m
+    memory: 64Mi
+  min:
+    cpu: 50m
+    memory: 32Mi
+  max:
+    cpu: 500m
+    memory: 256Mi
+
+image:
+  repository: nginxinc/nginx-unprivileged
+  tag: stable
+  pullPolicy: IfNotPresent
+
+demo:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi

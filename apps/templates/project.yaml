@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: workshop
+  namespace: argocd
+spec:
+  description: Instructor-owned OKE workshop
+  sourceRepos:
+    - {{ .Values.config.spec.source.repoURL | quote }}
+  destinations:
+{{- range .Values.applications }}
+{{- if ne .enabled false }}
+    - server: {{ $.Values.config.spec.destination.server | quote }}
+      namespace: {{ .destination.namespace | quote }}
+{{- end }}
+{{- end }}
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: LimitRange
+    - group: ""
+      kind: Pod
+    - group: ""
+      kind: ResourceQuota
+    - group: ""
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute

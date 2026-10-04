@@ -1,0 +1,5 @@
+apiVersion: v2
+name: workshop-governance
+description: Namespace governance and a restricted demo workload for the workshop
+type: application
+version: 0.1.0

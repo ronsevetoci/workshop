@@ -1,0 +1,13 @@
+global:
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
+# helm upgrade --install argocd argo/argo-cd \
+#  --namespace argocd \
+#  --create-namespace \
+#  --version 10.8.1 \
+#  --values argocd-values.yaml \
+#  --wait \
+#  --timeout 10m
