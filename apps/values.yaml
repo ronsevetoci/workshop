@@ -15,6 +15,7 @@ applications:
     syncWave: "10"
 
   - name: hpa
+    enabled: false
     project: workshop
     path: charts/hpa
     destination:
@@ -22,6 +23,7 @@ applications:
     syncWave: "20"
 
   - name: ingress
+    enabled: false
     project: workshop
     path: charts/ingress
     destination:
@@ -31,7 +33,31 @@ applications:
   - name: kpo
     enabled: false
     project: workshop
-    path: charts/kpo
     destination:
-      namespace: workshop-kpo
+      namespace: karpenter-system
     syncWave: "40"
+    sources:
+      - repoURL: https://oracle.github.io/karpenter-provider-oci/charts
+        chart: karpenter
+        targetRevision: "1.4.0"
+        helm:
+          releaseName: karpenter
+          valuesObject:
+            replicaCount: 1
+            nodeSelector:
+              kubernetes.io/os: linux
+              workshop.oracle.com/node-pool: core
+            tolerations:
+              - key: CriticalAddonsOnly
+                operator: Equal
+                value: "true"
+                effect: NoSchedule
+            topologySpreadConstraints: []
+            settings:
+              clusterCompartmentId: "ocid1.compartment.oc1..aaaaaaaayevnkjfyjb6nglndfrvgoy7hciclgf4kq7ioulokey7xfpixjhxa"
+              vcnCompartmentId: "ocid1.compartment.oc1..aaaaaaaayevnkjfyjb6nglndfrvgoy7hciclgf4kq7ioulokey7xfpixjhxa"
+              apiserverEndpoint: "10.0.163.10"
+              ociVcnIpNative: true
+      - repoURL: https://github.com/ronsevetoci/workshop
+        targetRevision: main
+        path: charts/kpo

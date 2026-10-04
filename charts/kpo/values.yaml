@@ -1,0 +1,83 @@
+namespace:
+  name: workshop-kpo
+
+oci:
+  # Required: subnet used by KPO-provisioned worker nodes.
+  workerSubnetId: ""
+
+  # Optional: set when KPO should launch nodes in a different compartment.
+  nodeCompartmentId: ""
+
+  # Optional: use an explicit OKE image OCID instead of imageFilter.
+  imageId: ""
+
+  imageFilter:
+    osFilter: Oracle Linux
+    osVersionFilter: "8"
+
+nodePool:
+  name: workshop-kpo-apps
+  nodeClassName: workshop-kpo-apps
+
+  labels:
+    workshop.oracle.com/workload-tier: kpo-apps
+
+  shapes:
+    - VM.Standard.E4.Flex
+    - VM.Standard.E5.Flex
+
+  capacityTypes:
+    - on-demand
+
+  shapeConfigs:
+    - ocpus: 2
+      memoryInGbs: 8
+    - ocpus: 4
+      memoryInGbs: 16
+
+  taints:
+    - key: workshop.oracle.com/kpo-apps
+      value: "true"
+      effect: NoSchedule
+
+  limits:
+    cpu: "8"
+    memory: 32Gi
+
+  expireAfter: Never
+  terminationGracePeriod: 30m
+
+  disruption:
+    consolidateAfter: 10m
+    consolidationPolicy: WhenEmpty
+
+workload:
+  name: kpo-scale-demo
+  replicas: 1
+
+  image:
+    repository: docker.io/library/nginx
+    tag: 1.27-alpine
+    pullPolicy: IfNotPresent
+
+  nodeSelector:
+    karpenter.sh/nodepool: workshop-kpo-apps
+
+  tolerations:
+    - key: workshop.oracle.com/kpo-apps
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+
+  hpa:
+    minReplicas: 1
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 60

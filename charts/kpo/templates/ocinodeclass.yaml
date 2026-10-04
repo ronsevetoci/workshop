@@ -1,0 +1,26 @@
+apiVersion: oci.oraclecloud.com/v1beta1
+kind: OCINodeClass
+metadata:
+  name: {{ .Values.nodePool.nodeClassName | quote }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+{{- with .Values.oci.nodeCompartmentId }}
+  nodeCompartmentId: {{ . | quote }}
+{{- end }}
+  shapeConfigs:
+{{ toYaml .Values.nodePool.shapeConfigs | nindent 4 }}
+  volumeConfig:
+    bootVolumeConfig:
+      imageConfig:
+        imageType: OKEImage
+{{- if .Values.oci.imageId }}
+        imageId: {{ .Values.oci.imageId | quote }}
+{{- else }}
+        imageFilter:
+{{ toYaml .Values.oci.imageFilter | nindent 10 }}
+{{- end }}
+  networkConfig:
+    primaryVnicConfig:
+      subnetConfig:
+        subnetId: {{ required "charts/kpo: oci.workerSubnetId must be set" .Values.oci.workerSubnetId | quote }}
