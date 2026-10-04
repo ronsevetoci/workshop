@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_ORG/YOUR_REPO.git
-    targetRevision: workshop
+    repoURL: https://github.com/ronsevetoci/workshop
+    targetRevision: main
     path: apps
   destination:
     server: https://kubernetes.default.svc
