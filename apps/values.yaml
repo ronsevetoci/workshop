@@ -43,7 +43,7 @@ applications:
               - --kubelet-preferred-address-types=InternalIP
 
   - name: hpa
-    enabled: false
+    enabled: true
     project: workshop
     path: charts/hpa
     destination:
