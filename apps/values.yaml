@@ -31,7 +31,7 @@ applications:
     syncWave: "30"
 
   - name: kpo
-    enabled: false
+    enabled: true
     project: workshop
     destination:
       namespace: karpenter-system
