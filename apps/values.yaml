@@ -45,6 +45,7 @@ applications:
   - name: envoy-gateway-controller
     enabled: true
     serverSideApply: true
+    ClientSideApplyMigration: false
     project: workshop
     destination:
       namespace: envoy-gateway-system
@@ -133,6 +134,7 @@ applications:
     enabled: true
     project: workshop
     serverSideApply: true
+    ClientSideApplyMigration: false
     destination:
       namespace: keda
     syncWave: "25"
@@ -176,6 +178,7 @@ applications:
   - name: kyverno
     enabled: true
     serverSideApply: true
+    ClientSideApplyMigration: false
     project: workshop
     destination:
       namespace: kyverno
