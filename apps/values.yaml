@@ -175,6 +175,7 @@ applications:
 
   - name: kyverno
     enabled: true
+    serverSideApply: true
     project: workshop
     destination:
       namespace: kyverno
@@ -189,7 +190,6 @@ applications:
             global:
               nodeSelector:
                 kubernetes.io/os: linux
-                oke.oraclecloud.com/pool.name: np-system
               tolerations:
                 - key: CriticalAddonsOnly
                   operator: Equal
@@ -198,6 +198,9 @@ applications:
 
             admissionController:
               replicas: 1
+              nodeSelector:
+                kubernetes.io/os: linux
+                oke.oraclecloud.com/pool.name: np-system
 
             backgroundController:
               replicas: 1
