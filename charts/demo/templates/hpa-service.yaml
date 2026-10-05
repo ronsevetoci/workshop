@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hpa-demo
-  namespace: {{ .Values.namespace | quote }}
+  namespace: {{ .Values.hpa.namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 spec:

@@ -1,6 +1,6 @@
 apiVersion: v2
 name: workshop-kpo-resources
-description: KPO NodePool and autoscaling demo resources for the OKE workshop
+description: KPO node provisioning resources for the OKE workshop
 type: application
 version: 0.1.0
 appVersion: "1.0"

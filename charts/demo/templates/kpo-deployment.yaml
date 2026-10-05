@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.kpo.workload.name | quote }}
+  namespace: {{ .Values.kpo.namespace | quote }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  replicas: {{ .Values.kpo.workload.replicas }}
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.kpo.workload.name | quote }}
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.kpo.workload.name | quote }}
+
+    spec:
+      nodeSelector:
+{{ toYaml .Values.kpo.workload.nodeSelector | nindent 8 }}
+
+      tolerations:
+{{ toYaml .Values.kpo.workload.tolerations | nindent 8 }}
+
+      containers:
+        - name: nginx
+          image: "{{ .Values.kpo.workload.image.repository }}:{{ .Values.kpo.workload.image.tag }}"
+          imagePullPolicy: {{ .Values.kpo.workload.image.pullPolicy }}
+
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+          resources:
+{{ toYaml .Values.kpo.workload.resources | nindent 12 }}

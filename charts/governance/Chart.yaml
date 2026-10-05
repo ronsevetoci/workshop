@@ -1,5 +1,5 @@
 apiVersion: v2
 name: workshop-governance
-description: Namespace governance and a restricted demo workload for the workshop
+description: Namespace governance for the OKE workshop
 type: application
 version: 0.1.0

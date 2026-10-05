@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hpa-demo
-  namespace: {{ .Values.namespace | quote }}
+  namespace: {{ .Values.hpa.namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "10"
   labels:
     app.kubernetes.io/name: hpa-demo
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.hpa.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: hpa-demo
@@ -19,10 +19,10 @@ spec:
     spec:
       containers:
         - name: hpa-demo
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.hpa.image.repository }}:{{ .Values.hpa.image.tag }}"
+          imagePullPolicy: {{ .Values.hpa.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 80
           resources:
-{{ toYaml .Values.resources | nindent 12 }}
+{{ toYaml .Values.hpa.resources | nindent 12 }}

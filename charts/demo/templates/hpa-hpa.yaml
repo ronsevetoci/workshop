@@ -2,7 +2,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-demo
-  namespace: {{ .Values.namespace | quote }}
+  namespace: {{ .Values.hpa.namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "20"
 spec:
@@ -10,8 +10,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: hpa-demo
-  minReplicas: {{ .Values.hpa.minReplicas }}
-  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  minReplicas: {{ .Values.hpa.autoscaler.minReplicas }}
+  maxReplicas: {{ .Values.hpa.autoscaler.maxReplicas }}
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 0
@@ -23,4 +23,4 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.hpa.targetCPUUtilization }}
+          averageUtilization: {{ .Values.hpa.autoscaler.targetCPUUtilization }}

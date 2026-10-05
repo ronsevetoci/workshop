@@ -1,0 +1,80 @@
+hpa:
+  namespace: workshop-hpa
+  replicaCount: 1
+  image:
+    repository: registry.k8s.io/hpa-example
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 200m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  autoscaler:
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilization: 50
+
+kpo:
+  namespace: workshop-kpo
+  workload:
+    name: kpo-scale-demo
+    replicas: 1
+    image:
+      repository: docker.io/library/nginx
+      tag: 1.27-alpine
+      pullPolicy: IfNotPresent
+    nodeSelector:
+      karpenter.sh/nodepool: workshop-kpo-apps
+    tolerations:
+      - key: workshop.oracle.com/kpo-apps
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 250m
+        memory: 128Mi
+    hpa:
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 60
+
+governance:
+  namespace: workshop-governance
+  image:
+    repository: docker.io/nginxinc/nginx-unprivileged
+    tag: stable
+    pullPolicy: IfNotPresent
+  demo:
+    replicas: 1
+    tolerations: []
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 250m
+        memory: 128Mi
+
+ingress:
+  namespace: envoy-gateway-system
+  tls:
+    enabled: false
+  dataPlane:
+    nodeSelector:
+      workshop.oracle.com/workload-tier: kpo-apps
+    tolerations:
+      - key: workshop.oracle.com/kpo-apps
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
+  demo:
+    enabled: true
+    replicas: 1
+    image: registry.k8s.io/echoserver:1.8

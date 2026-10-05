@@ -69,34 +69,3 @@ nodePool:
   disruption:
     consolidateAfter: 10m
     consolidationPolicy: WhenEmpty
-
-workload:
-  name: kpo-scale-demo
-  replicas: 1
-
-  image:
-    repository: docker.io/library/nginx
-    tag: 1.27-alpine
-    pullPolicy: IfNotPresent
-
-  nodeSelector:
-    karpenter.sh/nodepool: workshop-kpo-apps
-
-  tolerations:
-    - key: workshop.oracle.com/kpo-apps
-      operator: Equal
-      value: "true"
-      effect: NoSchedule
-
-  resources:
-    requests:
-      cpu: 100m
-      memory: 64Mi
-    limits:
-      cpu: 250m
-      memory: 128Mi
-
-  hpa:
-    minReplicas: 1
-    maxReplicas: 4
-    targetCPUUtilizationPercentage: 60

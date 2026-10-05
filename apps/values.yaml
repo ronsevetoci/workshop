@@ -42,14 +42,6 @@ applications:
             args:
               - --kubelet-preferred-address-types=InternalIP
 
-  - name: hpa
-    enabled: true
-    project: workshop
-    path: charts/hpa
-    destination:
-      namespace: workshop-hpa
-    syncWave: "20"
-
   - name: envoy-gateway-controller
     enabled: true
     serverSideApply: true
@@ -129,6 +121,14 @@ applications:
       - repoURL: https://github.com/ronsevetoci/workshop
         targetRevision: main
         path: charts/kpo
+  - name: demo
+    enabled: true
+    project: workshop
+    path: charts/demo
+    destination:
+      namespace: workshop-hpa
+    syncWave: "50"
+
   - name: keda
     enabled: true
     project: workshop

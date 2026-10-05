@@ -23,19 +23,3 @@ limitRange:
   max:
     cpu: 500m
     memory: 256Mi
-
-image:
-  repository: docker.io/nginxinc/nginx-unprivileged
-  tag: stable
-  pullPolicy: IfNotPresent
-
-demo:
-  replicas: 1
-  tolerations: []
-  resources:
-    requests:
-      cpu: 100m
-      memory: 64Mi
-    limits:
-      cpu: 250m
-      memory: 128Mi

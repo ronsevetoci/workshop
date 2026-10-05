@@ -23,8 +23,3 @@ dataPlane:
       operator: Equal
       value: "true"
       effect: NoSchedule
-
-demo:
-  enabled: true
-  replicas: 1
-  image: registry.k8s.io/echoserver:1.8
