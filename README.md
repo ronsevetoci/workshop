@@ -4,20 +4,8 @@ Instructor-owned Argo CD App-of-Apps repository for Ron’s OKE workshop topics.
 
 The repository assumes an existing OKE cluster. OCI IAM, dynamic groups, subnets, NSGs, OCI CNI configuration, and load-balancer network rules are external prerequisites.
 
-## Ron’s workshop scope
-
-| Original requirement | Repository mapping | Coverage |
-|---|---|---|
-| מדיניות אבטחת Pods | `charts/governance/templates/namespace.yaml`, `charts/demo/templates/governance.yaml`, Kyverno application in `apps/values.yaml` | Pod Security Admission and secure workload settings. Kyverno is installed for discussion; no policy demo is included. |
-| אופטימיזציית משאבים ועלויות | `charts/kpo/values.yaml`, `charts/kpo/templates/nodepool.yaml` | KPO limits, shape selection, consolidation, and disruption. OCI Cloud Advisor and full workload rightsizing are not implemented here. |
-| תשתית ליבה | `bootstrap/root-app.yaml`, `apps/`, `argocd-values.yaml` | Argo CD App-of-Apps and OKE ecosystem deployment. The OKE cluster itself is assumed to exist. |
-| ניהול ותחזוקת | `bootstrap/root-app.yaml`, `apps/` | GitOps deployment structure only. OKE maintenance and day-2 operations are covered in the presentation. |
-| עדכונים ושדרוגים | No dedicated chart or manifest | Covered in the OKE foundation presentation, not implemented by this repository. |
-| ארכיטקטורת High Availability | No dedicated chart or manifest | Covered in the OKE foundation presentation. |
-| Cluster Autoscaling | KPO source in `apps/values.yaml`; `charts/kpo/`; `charts/demo/templates/kpo-*` | KPO `NodePool`, `OCINodeClass`, workload-node taints, secondary VNICs, NSGs, and consolidation. The sample workload lives in the demo application. |
-| Workload Autoscaling | Metrics Server and KEDA applications in `apps/values.yaml`; `charts/demo/templates/hpa-*` | CPU-based HPA is demonstrated by the demo application. KEDA is installed but no `ScaledObject` is included. |
-| ניהול והגבלת משאבים (Quotas, Limits & LimitRanges) | `charts/governance/templates/resourcequota.yaml`, `charts/governance/templates/limitrange.yaml` | Namespace-level `ResourceQuota` and `LimitRange`. |
-| ניהול חשיפת שירותים ורשת (LB & Ingress) | Envoy Gateway application in `apps/values.yaml`; `charts/ingress/`; `charts/demo/templates/ingress-*` | Envoy Gateway, OCI Load Balancer annotations, Gateway API, and a demo-owned HTTPRoute and service. |
+## Scope
+https://kubernetes.io/docs/concepts/security/pod-security-admission/
 
 ## Main repository areas
 
