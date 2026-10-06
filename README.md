@@ -6,6 +6,7 @@ The repository assumes an existing OKE cluster. OCI IAM, dynamic groups, subnets
 
 ## Scope
 https://kubernetes.io/docs/concepts/security/pod-security-admission/
+
 https://github.com/kyverno/policies/tree/main/pod-security-vpol/restricted
 
 ## Main repository areas
